@@ -199,16 +199,6 @@
         padding: 10px 16px;
         font-weight: bold;
       }
-      .logoPick {
-        display: block;
-        width: 100%;
-        margin-top: 9px;
-        border: 1px solid #363640;
-        background: #0b0b0f;
-        color: var(--gold);
-        padding: 11px;
-        font-weight: 800;
-      }
       .error {
         display: none;
         padding: 12px;
@@ -267,16 +257,6 @@
         font-size: clamp(9px, 1.1vw, 16px);
         font-weight: 900;
         padding: 6px;
-        opacity: 0.5;
-      }
-      .wm-logo {
-        position: absolute;
-        z-index: 2;
-        width: 32%;
-        height: 35%;
-        object-fit: contain;
-        left: 34%;
-        top: 32.5%;
         opacity: 0.5;
       }
       .remove {
@@ -350,12 +330,8 @@
           >Watermark text<input
             id="wmText"
             type="text"
-            value="SLAG Studios - Proof"
+            value="♥ S.LA.G. Studio ♥ Proof ♥"
         /></label>
-        <label
-          >Watermark logo
-          <button id="logoButton" class="logoPick">Change logo</button>
-        </label>
         <label
           >Watermark strength <output id="opOut">18%</output
           ><input id="opacity" type="range" min="8" max="35" value="18"
@@ -394,23 +370,15 @@
       type="file"
       accept="image/jpeg,image/png,image/webp"
     />
-    <input
-      id="logoPicker"
-      hidden
-      type="file"
-      accept="image/jpeg,image/png,image/webp"
-    />
     <script>
       const MAX = 20,
         ok = ["image/jpeg", "image/png", "image/webp"],
         photos = [];
       let cols = 4,
-        dragged = null,
-        logoSrc = "slag-logo.png";
+        dragged = null;
       const $ = (s) => document.querySelector(s),
         grid = $("#grid"),
         picker = $("#picker"),
-        logoPicker = $("#logoPicker"),
         err = $("#error");
       const showError = (t) => {
         err.textContent = t;
@@ -442,7 +410,7 @@
           slot.dataset.i = i;
           if (p) {
             slot.draggable = true;
-            slot.innerHTML = `<img class="photo" src="${p.url}" alt="Proof ${i + 1}"><div class="wm">${$("#wmText").value.toUpperCase()}</div><img class="wm-logo" src="${logoSrc}" alt=""><button class="remove" title="Remove">×</button><b>${String(i + 1).padStart(2, "0")}</b>`;
+            slot.innerHTML = `<img class="photo" src="${p.url}" alt="Proof ${i + 1}"><div class="wm">${$("#wmText").value.toUpperCase()}</div><button class="remove" title="Remove">×</button><b>${String(i + 1).padStart(2, "0")}</b>`;
             slot.querySelector(".remove").onclick = (e) => {
               e.stopPropagation();
               URL.revokeObjectURL(p.url);
@@ -511,10 +479,7 @@
             M,
             210,
           );
-          const [images, logo] = await Promise.all([
-            Promise.all(photos.map((p) => load(p.url))),
-            load(logoSrc),
-          ]);
+          const images = await Promise.all(photos.map((p) => load(p.url)));
           images.forEach((im, n) => {
             const x = M + (n % cols) * (cw + G),
               y = H + Math.floor(n / cols) * (ch + G),
@@ -537,22 +502,12 @@
             c.textAlign = "center";
             c.font = `800 ${Math.max(25, cw / 18)}px Arial`;
             const text = (
-              $("#wmText").value.trim() || "SLAG Studios - Proof"
+              $("#wmText").value.trim() || "♥ S.LA.G. Studio ♥ Proof ♥"
             ).toUpperCase();
             for (let yy = -ch; yy <= ch; yy += 145) {
               c.strokeText(text, 0, yy);
               c.fillText(text, 0, yy);
             }
-            c.restore();
-            const ls = Math.min(
-                (cw * 0.32) / logo.naturalWidth,
-                (ch * 0.35) / logo.naturalHeight,
-              ),
-              lw = logo.naturalWidth * ls,
-              lh = logo.naturalHeight * ls;
-            c.save();
-            c.globalAlpha = 0.5;
-            c.drawImage(logo, x + (cw - lw) / 2, y + (ch - lh) / 2, lw, lh);
             c.restore();
             c.fillStyle = "#000d";
             c.fillRect(x, y + ch - 72, 112, 72);
@@ -583,19 +538,6 @@
         }
       }
       picker.onchange = (e) => addFiles(e.target.files);
-      $("#logoButton").onclick = () => logoPicker.click();
-      logoPicker.onchange = (e) => {
-        const file = e.target.files[0];
-        if (!file) return;
-        if (!ok.includes(file.type)) {
-          showError("Choose a JPG, PNG, or WebP logo.");
-          return;
-        }
-        if (logoSrc.startsWith("blob:")) URL.revokeObjectURL(logoSrc);
-        logoSrc = URL.createObjectURL(file);
-        showError("");
-        render();
-      };
       $("#add").onclick = () => picker.click();
       $("#drop").ondragover = (e) => e.preventDefault();
       $("#drop").ondrop = (e) => {
