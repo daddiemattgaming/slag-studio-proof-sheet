@@ -257,7 +257,7 @@
         font-size: clamp(9px, 1.1vw, 16px);
         font-weight: 900;
         padding: 6px;
-        opacity: 0.7;
+        opacity: 0.5;
       }
       .wm-logo {
         position: absolute;
@@ -344,8 +344,8 @@
             value="SLAG Studios - Proof"
         /></label>
         <label
-          >Watermark strength <output id="opOut">28%</output
-          ><input id="opacity" type="range" min="12" max="50" value="28"
+          >Watermark strength <output id="opOut">18%</output
+          ><input id="opacity" type="range" min="8" max="35" value="18"
         /></label>
         <fieldset>
           <legend>Grid columns</legend>
@@ -516,6 +516,9 @@
             c.fillRect(x, y, cw, ch);
             c.drawImage(im, x + (cw - dw) / 2, y + (ch - dh) / 2, dw, dh);
             c.save();
+            c.beginPath();
+            c.rect(x, y, cw, ch);
+            c.clip();
             c.globalAlpha = +$("#opacity").value / 100;
             c.translate(x + cw / 2, y + ch / 2);
             c.rotate(-Math.PI / 6);
@@ -527,7 +530,7 @@
             const text = (
               $("#wmText").value.trim() || "SLAG Studios - Proof"
             ).toUpperCase();
-            for (let yy = -ch; yy <= ch; yy += 88) {
+            for (let yy = -ch; yy <= ch; yy += 145) {
               c.strokeText(text, 0, yy);
               c.fillText(text, 0, yy);
             }
