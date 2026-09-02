@@ -1,0 +1,604 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Shoot Like A Girl | Proof Sheet Studio</title>
+    <style>
+      :root {
+        --pink: #ff2d8d;
+        --gold: #d6ab55;
+        --line: #2b2b33;
+        --muted: #92929f;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: #0a0a0d;
+        color: #f7f3ed;
+        font:
+          16px Arial,
+          sans-serif;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      button {
+        cursor: pointer;
+      }
+      .top {
+        height: 84px;
+        padding: 0 30px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        border-bottom: 1px solid var(--line);
+        background: #0d0d11;
+        position: sticky;
+        top: 0;
+        z-index: 5;
+      }
+      .brand {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+      }
+      .brand img {
+        width: 58px;
+        height: 58px;
+        object-fit: contain;
+      }
+      .brand h1 {
+        font-size: 20px;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .brand p {
+        font-size: 11px;
+        color: var(--gold);
+        margin: 4px 0;
+        letter-spacing: 0.2em;
+      }
+      .safe {
+        font-size: 13px;
+        color: #aaa;
+      }
+      .safe span {
+        color: #42d392;
+      }
+      .work {
+        display: grid;
+        grid-template-columns: 310px 1fr;
+        min-height: calc(100vh - 84px);
+      }
+      aside {
+        background: #131318;
+        border-right: 1px solid var(--line);
+        padding: 28px;
+        position: sticky;
+        top: 84px;
+        height: calc(100vh - 84px);
+      }
+      .setup {
+        display: flex;
+        justify-content: space-between;
+        color: var(--gold);
+        font-size: 12px;
+        letter-spacing: 0.18em;
+        margin-bottom: 25px;
+      }
+      .setup b {
+        color: #fff;
+      }
+      label,
+      legend {
+        display: block;
+        font-size: 13px;
+        font-weight: bold;
+        color: #c8c8d0;
+        margin-bottom: 20px;
+      }
+      label output {
+        float: right;
+        color: var(--pink);
+      }
+      input[type="text"] {
+        display: block;
+        width: 100%;
+        margin-top: 9px;
+        padding: 12px;
+        background: #0b0b0f;
+        color: #fff;
+        border: 1px solid #363640;
+      }
+      input[type="range"] {
+        display: block;
+        width: 100%;
+        margin-top: 14px;
+        accent-color: var(--pink);
+      }
+      fieldset {
+        padding: 0;
+        border: 0;
+        margin: 0 0 25px;
+      }
+      .segments {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        border: 1px solid #363640;
+        margin-top: 9px;
+      }
+      .segments button {
+        border: 0;
+        padding: 10px;
+        background: #0b0b0f;
+        color: #aaa;
+      }
+      .segments .active {
+        background: var(--gold);
+        color: #111;
+        font-weight: bold;
+      }
+      .download {
+        width: 100%;
+        padding: 15px 8px;
+        border: 0;
+        background: var(--pink);
+        color: #fff;
+        font-weight: 900;
+        font-size: 12px;
+        letter-spacing: 0.08em;
+        box-shadow: 5px 5px 0 var(--gold);
+      }
+      .download:disabled {
+        opacity: 0.35;
+        box-shadow: none;
+      }
+      .clear {
+        width: 100%;
+        border: 0;
+        background: none;
+        color: #aaa;
+        padding: 18px;
+      }
+      .tip {
+        border-top: 1px solid var(--line);
+        padding-top: 18px;
+        color: var(--muted);
+        font-size: 12px;
+        line-height: 1.6;
+      }
+      .main {
+        padding: 32px;
+        min-width: 0;
+      }
+      .heading {
+        display: flex;
+        align-items: end;
+        justify-content: space-between;
+        margin-bottom: 24px;
+      }
+      .heading h2 {
+        margin: 0;
+        font-size: 28px;
+        text-transform: uppercase;
+      }
+      .heading p {
+        margin: 6px 0 0;
+        color: var(--muted);
+        font-size: 14px;
+      }
+      .add {
+        border: 1px solid var(--gold);
+        background: none;
+        color: var(--gold);
+        padding: 10px 16px;
+        font-weight: bold;
+      }
+      .error {
+        display: none;
+        padding: 12px;
+        background: #4c142d;
+        border-left: 3px solid var(--pink);
+        margin-bottom: 15px;
+      }
+      .grid {
+        display: grid;
+        grid-template-columns: repeat(4, minmax(130px, 1fr));
+        gap: 16px;
+      }
+      .grid.five {
+        grid-template-columns: repeat(5, minmax(110px, 1fr));
+      }
+      .slot {
+        aspect-ratio: 4/3;
+        position: relative;
+        border: 1px dashed #3c3c45;
+        background: #101014;
+        overflow: hidden;
+      }
+      .slot.empty {
+        display: grid;
+        place-items: center;
+        color: #484851;
+        cursor: pointer;
+      }
+      .slot.empty i {
+        font-style: normal;
+        font-size: 30px;
+      }
+      .slot > img.photo {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+        display: block;
+      }
+      .slot b {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        background: #09090ddd;
+        padding: 8px 12px;
+        color: var(--gold);
+        z-index: 3;
+      }
+      .wm {
+        position: absolute;
+        left: -25%;
+        right: -25%;
+        top: 43%;
+        transform: rotate(-22deg);
+        text-align: center;
+        background: #0005;
+        font-size: clamp(9px, 1.1vw, 16px);
+        font-weight: 900;
+        padding: 6px;
+        opacity: 0.7;
+      }
+      .wm-logo {
+        position: absolute;
+        z-index: 2;
+        width: 32%;
+        height: 35%;
+        object-fit: contain;
+        left: 34%;
+        top: 32.5%;
+        opacity: 0.55;
+        filter: grayscale(1) brightness(0) invert(1);
+      }
+      .remove {
+        position: absolute;
+        right: 7px;
+        top: 7px;
+        border: 0;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        background: #09090ddd;
+        color: white;
+        font-size: 20px;
+      }
+      .filled {
+        cursor: grab;
+        border-style: solid;
+      }
+      @media (max-width: 900px) {
+        .work {
+          grid-template-columns: 1fr;
+        }
+        aside {
+          position: static;
+          height: auto;
+        }
+        .grid,
+        .grid.five {
+          grid-template-columns: repeat(3, 1fr);
+        }
+      }
+      @media (max-width: 560px) {
+        .safe {
+          display: none;
+        }
+        .work .main {
+          padding: 18px;
+        }
+        .grid,
+        .grid.five {
+          grid-template-columns: repeat(2, 1fr);
+          gap: 10px;
+        }
+        .heading h2 {
+          font-size: 21px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="top">
+      <div class="brand">
+        <img src="slag-logo.png" alt="" />
+        <div>
+          <h1>Shoot Like A Girl</h1>
+          <p>Proof Sheet Studio</p>
+        </div>
+      </div>
+      <div class="safe"><span>●</span> Photos stay on this device</div>
+    </header>
+    <section class="work">
+      <aside>
+        <div class="setup"><span>SETUP</span><b id="count">0/20</b></div>
+        <label
+          >Client name<input
+            id="client"
+            type="text"
+            placeholder="e.g. Bella Rae"
+        /></label>
+        <label
+          >Watermark text<input
+            id="wmText"
+            type="text"
+            value="SLAG Studios - Proof"
+        /></label>
+        <label
+          >Watermark strength <output id="opOut">28%</output
+          ><input id="opacity" type="range" min="12" max="50" value="28"
+        /></label>
+        <fieldset>
+          <legend>Grid columns</legend>
+          <div class="segments">
+            <button id="four" class="active">4</button
+            ><button id="five">5</button>
+          </div>
+        </fieldset>
+        <button id="download" class="download" disabled>
+          DOWNLOAD PROOF SHEET</button
+        ><button id="clear" class="clear">Clear all photos</button>
+        <p class="tip">
+          Original framing is preserved. The download is one flattened,
+          watermarked JPG—ideal for a Discord ticket.
+        </p>
+      </aside>
+      <main class="main" id="drop">
+        <div class="heading">
+          <div>
+            <h2>Client proofs</h2>
+            <p>Drop photos below. Drag filled cards to reorder.</p>
+          </div>
+          <button class="add" id="add">+ Add photos</button>
+        </div>
+        <div class="error" id="error"></div>
+        <div class="grid" id="grid"></div>
+      </main>
+    </section>
+    <input
+      id="picker"
+      hidden
+      multiple
+      type="file"
+      accept="image/jpeg,image/png,image/webp"
+    />
+    <script>
+      const MAX = 20,
+        ok = ["image/jpeg", "image/png", "image/webp"],
+        photos = [];
+      let cols = 4,
+        dragged = null;
+      const $ = (s) => document.querySelector(s),
+        grid = $("#grid"),
+        picker = $("#picker"),
+        err = $("#error");
+      const showError = (t) => {
+        err.textContent = t;
+        err.style.display = t ? "block" : "none";
+      };
+      function addFiles(files) {
+        const incoming = [...files].filter((f) => ok.includes(f.type)),
+          room = MAX - photos.length;
+        if (!incoming.length)
+          return showError("Choose JPG, PNG, or WebP photos.");
+        incoming
+          .slice(0, room)
+          .forEach((file) =>
+            photos.push({ file, url: URL.createObjectURL(file) }),
+          );
+        showError(
+          incoming.length > room
+            ? `Only the first ${room} photos were added. The sheet holds 20.`
+            : "",
+        );
+        render();
+      }
+      function render() {
+        grid.innerHTML = "";
+        for (let i = 0; i < MAX; i++) {
+          const p = photos[i],
+            slot = document.createElement("article");
+          slot.className = "slot " + (p ? "filled" : "empty");
+          slot.dataset.i = i;
+          if (p) {
+            slot.draggable = true;
+            slot.innerHTML = `<img class="photo" src="${p.url}" alt="Proof ${i + 1}"><div class="wm">${$("#wmText").value.toUpperCase()}</div><img class="wm-logo" src="slag-logo.png" alt=""><button class="remove" title="Remove">×</button><b>${String(i + 1).padStart(2, "0")}</b>`;
+            slot.querySelector(".remove").onclick = (e) => {
+              e.stopPropagation();
+              URL.revokeObjectURL(p.url);
+              photos.splice(i, 1);
+              render();
+            };
+            slot.ondragstart = () => (dragged = i);
+            slot.ondragover = (e) => e.preventDefault();
+            slot.ondrop = () => {
+              if (dragged === null || dragged === i || i >= photos.length)
+                return;
+              const [m] = photos.splice(dragged, 1);
+              photos.splice(i, 0, m);
+              dragged = null;
+              render();
+            };
+          } else {
+            slot.innerHTML = `<div><i>+</i><br><small>DROP PHOTO</small></div><b>${String(i + 1).padStart(2, "0")}</b>`;
+            slot.onclick = () => picker.click();
+          }
+          grid.append(slot);
+        }
+        $("#count").textContent = `${photos.length}/20`;
+        $("#download").disabled = !photos.length;
+      }
+      const load = (src) =>
+        new Promise((res, rej) => {
+          const i = new Image();
+          i.onload = () => res(i);
+          i.onerror = rej;
+          i.src = src;
+        });
+      function whiteLogo(source) {
+        const mask = document.createElement("canvas");
+        mask.width = source.naturalWidth;
+        mask.height = source.naturalHeight;
+        const context = mask.getContext("2d");
+        context.drawImage(source, 0, 0);
+        context.globalCompositeOperation = "source-in";
+        context.fillStyle = "#fff";
+        context.fillRect(0, 0, mask.width, mask.height);
+        return mask;
+      }
+      async function download() {
+        if (!photos.length) return;
+        const btn = $("#download");
+        btn.textContent = "BUILDING…";
+        btn.disabled = true;
+        try {
+          const W = 2400,
+            M = 96,
+            G = 28,
+            H = 260,
+            cw = (W - M * 2 - G * (cols - 1)) / cols,
+            ch = Math.round(cw * 0.72),
+            rows = Math.ceil(photos.length / cols),
+            canvas = document.createElement("canvas");
+          canvas.width = W;
+          canvas.height = H + rows * ch + Math.max(0, rows - 1) * G + M;
+          const c = canvas.getContext("2d");
+          c.fillStyle = "#09090b";
+          c.fillRect(0, 0, W, canvas.height);
+          c.fillStyle = "#ff2d8d";
+          c.fillRect(0, 0, 18, canvas.height);
+          c.fillStyle = "#f7f3ed";
+          c.font = "800 72px Arial";
+          c.fillText("SHOOT LIKE A GIRL", M, 102);
+          c.fillStyle = "#d6ab55";
+          c.font = "700 30px Arial";
+          c.fillText("CLIENT PROOF SHEET", M, 154);
+          c.fillStyle = "#a1a1aa";
+          c.font = "27px Arial";
+          c.fillText(
+            $("#client").value.trim()
+              ? `CLIENT: ${$("#client").value.trim().toUpperCase()}`
+              : "UNEDITED CLIENT PROOFS",
+            M,
+            210,
+          );
+          const [images, originalLogo] = await Promise.all([
+            Promise.all(photos.map((p) => load(p.url))),
+            load("slag-logo.png"),
+          ]);
+          const logo = whiteLogo(originalLogo);
+          images.forEach((im, n) => {
+            const x = M + (n % cols) * (cw + G),
+              y = H + Math.floor(n / cols) * (ch + G),
+              s = Math.min(cw / im.naturalWidth, ch / im.naturalHeight),
+              dw = im.naturalWidth * s,
+              dh = im.naturalHeight * s;
+            c.fillStyle = "#050507";
+            c.fillRect(x, y, cw, ch);
+            c.drawImage(im, x + (cw - dw) / 2, y + (ch - dh) / 2, dw, dh);
+            c.save();
+            c.globalAlpha = +$("#opacity").value / 100;
+            c.translate(x + cw / 2, y + ch / 2);
+            c.rotate(-Math.PI / 6);
+            c.fillStyle = "#fff";
+            c.strokeStyle = "#000";
+            c.lineWidth = 5;
+            c.textAlign = "center";
+            c.font = `800 ${Math.max(25, cw / 18)}px Arial`;
+            const text = (
+              $("#wmText").value.trim() || "SLAG Studios - Proof"
+            ).toUpperCase();
+            for (let yy = -ch; yy <= ch; yy += 88) {
+              c.strokeText(text, 0, yy);
+              c.fillText(text, 0, yy);
+            }
+            c.restore();
+            const ls = Math.min(
+                (cw * 0.32) / logo.naturalWidth,
+                (ch * 0.35) / logo.naturalHeight,
+              ),
+              lw = logo.naturalWidth * ls,
+              lh = logo.naturalHeight * ls;
+            c.save();
+            c.globalAlpha = Math.min(0.8, +$("#opacity").value / 100 + 0.18);
+            c.drawImage(logo, x + (cw - lw) / 2, y + (ch - lh) / 2, lw, lh);
+            c.restore();
+            c.fillStyle = "#000d";
+            c.fillRect(x, y + ch - 72, 112, 72);
+            c.fillStyle = "#fff";
+            c.textAlign = "center";
+            c.font = "800 42px Arial";
+            c.fillText(String(n + 1).padStart(2, "0"), x + 56, y + ch - 22);
+            c.strokeStyle = "#d6ab55";
+            c.lineWidth = 3;
+            c.strokeRect(x, y, cw, ch);
+          });
+          const a = document.createElement("a"),
+            safe = $("#client")
+              .value.trim()
+              .replace(/[^a-z0-9]+/gi, "-")
+              .replace(/^-|-$/g, "")
+              .toLowerCase();
+          a.download = `${safe || "client"}-proof-sheet.jpg`;
+          a.href = canvas.toDataURL("image/jpeg", 0.86);
+          a.click();
+        } catch (e) {
+          showError(
+            "The sheet could not be created. Try removing the last photo and adding it again.",
+          );
+        } finally {
+          btn.textContent = "DOWNLOAD PROOF SHEET";
+          btn.disabled = !photos.length;
+        }
+      }
+      picker.onchange = (e) => addFiles(e.target.files);
+      $("#add").onclick = () => picker.click();
+      $("#drop").ondragover = (e) => e.preventDefault();
+      $("#drop").ondrop = (e) => {
+        e.preventDefault();
+        addFiles(e.dataTransfer.files);
+      };
+      $("#wmText").oninput = render;
+      $("#opacity").oninput = (e) =>
+        ($("#opOut").textContent = e.target.value + "%");
+      $("#four").onclick = () => {
+        cols = 4;
+        grid.classList.remove("five");
+        $("#four").classList.add("active");
+        $("#five").classList.remove("active");
+      };
+      $("#five").onclick = () => {
+        cols = 5;
+        grid.classList.add("five");
+        $("#five").classList.add("active");
+        $("#four").classList.remove("active");
+      };
+      $("#clear").onclick = () => {
+        photos.forEach((p) => URL.revokeObjectURL(p.url));
+        photos.length = 0;
+        render();
+      };
+      $("#download").onclick = download;
+      render();
+    </script>
+  </body>
+</html>
